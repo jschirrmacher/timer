@@ -1,0 +1,58 @@
+<html>
+  <head>
+    <title>Timer</title>
+    <style>
+      html, body {margin: 0; height: 100%; width: 100%;}
+      svg {height: 100%; width: 100%; transform: rotate(-90deg) scale(1, -1);}
+      #fives {fill: white; stroke: black;}
+      #ones {fill: transparent; stroke: black;}
+      #red {fill: transparent; stroke: red; stroke-dasharray: 0,2000;}
+    </style>
+  </head>
+  <body>
+    <svg id="timer" viewBox="0 0 1000 1000">
+    </svg>
+
+    <script>
+      let value = 60 * 60
+      const config = {
+        radius: 130,
+        tickWidth: 10,
+        tickLength: 30,
+        fivesLength: 60,
+        redSpacing: 20
+      }
+      config.ticks = config.radius * 2 * Math.PI
+
+      const svg = document.getElementById('timer')
+      svg.appendChild(createTicks('fives', 12, config.fivesLength))
+      svg.appendChild(createTicks('fives', 60, config.tickLength))
+      const timer = createCircle('red', config.radius, '')
+      svg.appendChild(timer)
+
+      window.setInterval(decrementToZero, 1000)
+      
+      function decrementToZero() {
+        if (value) {
+          timer.setAttribute('style', 'stroke-width: ' + (config.radius) * 2 + '; stroke-dasharray: ' + (value-- / 3600 * config.ticks) + ',2000')
+        }
+      }
+
+      function createTicks(id, count, length) {
+        const radius = config.radius * 2 + config.redSpacing + length / 2
+        const strokeArray = config.tickWidth + ',' + (radius * 2 * Math.PI / count - config.tickWidth)
+        return createCircle(id, radius, length, strokeArray)
+      }
+
+      function createCircle(id, radius, strokeWidth, dashArray) {
+        const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle')
+        circle.id = id
+        circle.setAttribute('cx', 500)
+        circle.setAttribute('cy', 500)
+        circle.setAttribute('r', radius)
+        circle.setAttribute('style', 'stroke-width: ' + strokeWidth + '; stroke-dasharray: ' + dashArray)
+        return circle
+      }
+    </script>
+  </body>
+</html>
