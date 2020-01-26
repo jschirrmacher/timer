@@ -6,4 +6,4 @@ Regrettably, whenever you need it, you left it home. And if only, because it is 
 
 Now you can use this small application to use it without needing to carry more than you already have - your computer.
 
-<iframe src="https://jschirrmacher.github.io/timer/?value=1200" width="100%" height="500"></iframe>
+[See here](https://jschirrmacher.github.io/timer/?value=1200) how it looks like.
