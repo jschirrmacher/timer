@@ -19,7 +19,7 @@
     <a id="goGitHub" href="https://github.com/jschirrmacher/timer" target="_blank">View on GitHub</a>
 
     <script>
-      const match = location.search.match(/value=(\d+)/)
+      const match = location.search.match(/value=(\d+)/) || [0, 15 * 60]
       let value = Math.min(3600, Math.max(0, match[1]))
       const config = {
         radius: 130,
