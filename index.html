@@ -2,19 +2,25 @@
   <head>
     <title>Timer</title>
     <style>
-      html, body {margin: 0; height: 100%; width: 100%;}
+      html, body {margin: 0; height: 100%; width: 100%; font-family: Arial;}
+      h1 {font-size: 20px; text-align: center; position: fixed; width: 100%;}
       svg {height: 100%; width: 100%; transform: rotate(-90deg) scale(1, -1);}
       #fives {fill: white; stroke: black;}
       #ones {fill: transparent; stroke: black;}
       #red {fill: transparent; stroke: red; stroke-dasharray: 0,2000;}
+      #goGitHub {position: absolute; right: 5px; top: 5px; text-decoration: none; color: black;}
     </style>
   </head>
   <body>
+    <h1>Drag the mouse to setup timer</h1>
     <svg id="timer" viewBox="0 0 1000 1000">
     </svg>
 
+    <a id="goGitHub" href="https://github.com/jschirrmacher/timer" target="_blank">View on GitHub</a>
+
     <script>
-      let value = 0
+      const match = location.search.match(/value=(\d+)/)
+      let value = Math.min(3600, Math.max(0, match[1]))
       const config = {
         radius: 130,
         tickWidth: 10,
