@@ -38,6 +38,7 @@
       const timer = createCircle('red', config.radius, '')
       svg.appendChild(timer)
 
+      updateTimer()
       window.setInterval(decrementToZero, 1000)
       svg.addEventListener('mousedown', event => {
         inSet = true
