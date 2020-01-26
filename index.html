@@ -15,6 +15,7 @@
     <h1>Drag the mouse to setup timer</h1>
     <svg id="timer" viewBox="0 0 1000 1000">
     </svg>
+    <audio id="sound" src="A-Tone.wav"></audio>
 
     <a id="goGitHub" href="https://github.com/jschirrmacher/timer" target="_blank">View on GitHub</a>
 
@@ -31,7 +32,9 @@
       config.ticks = config.radius * 2 * Math.PI
       let inSet = false
       let startPos
+      let playSound = 0
 
+      const sound = document.getElementById('sound')
       const svg = document.getElementById('timer')
       svg.appendChild(createTicks('fives', 12, config.fivesLength))
       svg.appendChild(createTicks('fives', 60, config.tickLength))
@@ -51,14 +54,24 @@
           updateTimer()
         }
       })
+      sound.addEventListener('ended', () => {
+        if (--playSound) {
+          sound.play()
+        }
+      })
+
       
       function updateTimer() {
         timer.setAttribute('style', 'stroke-width: ' + (config.radius) * 2 + '; stroke-dasharray: ' + (value / 3600 * config.ticks) + ',2000')
       }
       function decrementToZero() {
-        if (value) {
+        if (value > 0) {
           value--
           updateTimer()
+          if (value === 0) {
+            playSound = 3
+            sound.play()
+          }
         }
       }
 
