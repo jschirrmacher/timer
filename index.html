@@ -43,14 +43,18 @@
 
       updateTimer()
       window.setInterval(decrementToZero, 1000)
-      svg.addEventListener('mousedown', handleStart)
-      svg.addEventListener('mouseup', handleEnd)
-      svg.addEventListener('mousemove', handleMove)
+      bindHandler(svg, 'mousedown touchstart', handleStart)
+      bindHandler(svg, 'mouseup touchend', handleEnd)
+      bindHandler(svg, 'mousemove touchmove', handleMove)
       sound.addEventListener('ended', () => {
         if (--playSound) {
           sound.play()
         }
       })
+
+      function bindHandler(el, events, listener) {
+        events.split(' ').forEach(event => el.addEventListener(event, listener))
+      }
 
       function handleStart(event) {
         inSet = true
