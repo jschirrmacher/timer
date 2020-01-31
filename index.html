@@ -1,8 +1,9 @@
 <html>
   <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <title>Timer</title>
     <style>
-      html, body {margin: 0; height: 100%; width: 100%; font-family: Arial;}
+      html, body {margin: 0; height: 100%; width: 100%; overflow: hidden; font-family: Arial;}
       h1 {font-size: 20px; text-align: center; position: fixed; width: 100%;}
       svg {height: 100%; width: 100%; transform: rotate(-90deg) scale(1, -1);}
       #fives {fill: white; stroke: black;}
@@ -60,9 +61,10 @@
       }
       function handleMove(event) {
         if (inSet) {
-          const r = event.toElement.getBoundingClientRect()
-          const deltaX = event.clientX - r.x - r.width / 2
-          const deltaY = event.clientY - r.y - r.height / 2
+          const pos = event.type === 'touchmove' ? event.changedTouches[0] : event
+          const r = svg.getBoundingClientRect()
+          const deltaX = pos.clientX - r.x - r.width / 2
+          const deltaY = pos.clientY - r.y - r.height / 2
           value = ((270 - Math.atan2(deltaY, deltaX) * (180 / Math.PI)) % 360) * 10
           console.log(value)
           updateTimer()
