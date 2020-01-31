@@ -65,6 +65,7 @@
       }
       function handleMove(event) {
         if (inSet) {
+          event.preventDefault()
           const pos = event.type === 'touchmove' ? event.changedTouches[0] : event
           const r = svg.getBoundingClientRect()
           const deltaX = pos.clientX - r.x - r.width / 2
