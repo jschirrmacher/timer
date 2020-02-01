@@ -87,7 +87,7 @@
         if (value > 0) {
           value--
           updateTimer()
-          if (value === 0) {
+          if (value <= 0) {
             playSound = 3
             sound.play()
           }
