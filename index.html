@@ -4,7 +4,7 @@
     <title>Timer</title>
     <style>
       html, body {margin: 0; height: 100%; width: 100%; overflow: hidden; font-family: Arial; user-select: none;}
-      h1 {font-size: 20px; text-align: center; position: fixed; width: 100%;}
+      h1 {font-size: 20px; text-align: center; position: fixed; width: 100%; top: 50%; margin-top: .7em; z-index: 1;}
       svg {height: 100%; width: 100%; transform: rotate(-90deg) scale(1, -1); user-select: none;}
       #fives {fill: white; stroke: black;}
       #ones {fill: transparent; stroke: black;}
@@ -26,7 +26,9 @@
     <a id="goGitHub" href="https://github.com/jschirrmacher/timer" target="_blank">View on GitHub</a>
 
     <script>
-      let value = 0
+      const match = location.search.match(/value=(\d+)/) || [0, 15 * 60]
+      let value = 'ontouchstart' in window ? 0 : Math.min(3600, Math.max(0, match[1]))
+      
       const config = {
         radius: 180,
         tickWidth: 10,
