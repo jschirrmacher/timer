@@ -11,6 +11,8 @@ const config = {
 config.ticks = config.radius * 2 * Math.PI
 let inSet = false
 let playSound = 0
+let alarmTime
+let alarmTimer
 
 const currentTime = document.getElementById('currentTime')
 const sound = document.getElementById('sound')
@@ -20,8 +22,9 @@ svg.appendChild(createTicks('fives', 60, config.tickLength))
 const timer = createCircle('red', config.radius, '')
 svg.appendChild(timer)
 
+setupAlarm(value)
 updateTimer()
-window.setInterval(decrementToZero, 1000)
+window.setInterval(updateTimer, 1000)
 bindHandler(svg, 'mousedown touchstart', handleStart)
 bindHandler(svg, 'mouseup touchend', handleEnd)
 bindHandler(svg, 'mousemove touchmove', handleMove)
@@ -49,28 +52,41 @@ function handleMove(event) {
         const deltaX = pos.clientX - r.x - r.width / 2
         const deltaY = pos.clientY - r.y - r.height / 2
         value = ((270 - Math.atan2(deltaY, deltaX) * (180 / Math.PI)) % 360) * 10
+        setupAlarm(value)
         updateTimer()
     }
 }
 
-function handleEnd(event) {
+function handleEnd() {
     inSet = false
+    setupAlarm(value)
+}
+
+function setupAlarm(seconds) {
+    if (alarmTimer) {
+        clearTimeout(alarmTimer)
+        alarmTimer = 0
+    }
+    if (seconds > 0) {
+        alarmTime = new Date((new Date()).getTime() + seconds * 1000)
+        alarmTimer = setTimeout(alarm, seconds * 1000)
+    }
+}
+
+function alarm() {
+    alarmTimer = 0
+    playSound = 3
+    sound.play()
 }
 
 function updateTimer() {
-    timer.setAttribute('style', 'stroke-width: ' + (config.radius) * 2 + '; stroke-dasharray: ' + (value / 3600 * config.ticks) + ',2000')
-    currentTime.innerText = (new Date()).toLocaleTimeString()
-}
-
-function decrementToZero() {
-    if (value > 0) {
-        value--
-        updateTimer()
-        if (value <= 0) {
-            playSound = 3
-            sound.play()
-        }
+    value = (alarmTime - new Date()) / 1000
+    if (value >= 0) {
+        timer.setAttribute('style', 'stroke-width: ' + (config.radius) * 2 + '; stroke-dasharray: ' + (value / 3600 * config.ticks) + ',2000')
+    } else {
+        timer.removeAttribute('style')
     }
+    currentTime.innerText = (new Date()).toLocaleTimeString()
 }
 
 function createTicks(id, count, length) {
