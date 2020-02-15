@@ -91,8 +91,11 @@ function updateTimer() {
     } else {
         timer.removeAttribute('style')
     }
-    minute.setAttribute('style', 'transform: translate(50%,50%) rotate(' + (-(new Date().getMinutes() * 360 / 60)) + 'deg)')
-    hour.setAttribute('style', 'transform: translate(50%,50%) rotate(' + (-(new Date().getHours() * 360 / 12)) + 'deg)')
+    const now = new Date()
+    const hourPos = -(now.getHours() * 60 + now.getMinutes()) / 2
+    const minutePos = -(now.getMinutes() * 60 + now.getSeconds()) / 10
+    minute.setAttribute('style', 'transform: translate(50%,50%) rotate(' + minutePos + 'deg)')
+    hour.setAttribute('style', 'transform: translate(50%,50%) rotate(' + hourPos + 'deg)')
     currentTime.innerText = (new Date()).toLocaleTimeString()
 }
 
