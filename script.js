@@ -6,7 +6,8 @@ const config = {
     tickWidth: 10,
     tickLength: 30,
     fivesLength: 60,
-    redSpacing: 20
+    redSpacing: 20,
+    handWidth: 10
 }
 config.ticks = config.radius * 2 * Math.PI
 let inSet = false
@@ -21,6 +22,10 @@ svg.appendChild(createTicks('fives', 12, config.fivesLength))
 svg.appendChild(createTicks('fives', 60, config.tickLength))
 const timer = createCircle('red', config.radius, '')
 svg.appendChild(timer)
+const minute = createHand('minute', 350)
+svg.appendChild(minute)
+const hour = createHand('hour', 220)
+svg.appendChild(hour)
 
 setupAlarm(value)
 updateTimer()
@@ -86,6 +91,8 @@ function updateTimer() {
     } else {
         timer.removeAttribute('style')
     }
+    minute.setAttribute('style', 'transform: translate(50%,50%) rotate(' + (-(new Date().getMinutes() * 360 / 60)) + 'deg)')
+    hour.setAttribute('style', 'transform: translate(50%,50%) rotate(' + (-(new Date().getHours() * 360 / 12)) + 'deg)')
     currentTime.innerText = (new Date()).toLocaleTimeString()
 }
 
@@ -103,4 +110,15 @@ function createCircle(id, radius, strokeWidth, dashArray) {
     circle.setAttribute('r', radius)
     circle.setAttribute('style', 'stroke-width: ' + strokeWidth + '; stroke-dasharray: ' + dashArray)
     return circle
+}
+
+function createHand(id, width) {
+    const hand = document.createElementNS('http://www.w3.org/2000/svg', 'rect')
+    hand.id = id
+    hand.setAttribute('class', 'hand')
+    hand.setAttribute('x', -config.handWidth * 2)
+    hand.setAttribute('y', -config.handWidth / 2)
+    hand.setAttribute('width', width)
+    hand.setAttribute('height', config.handWidth)
+    return hand
 }

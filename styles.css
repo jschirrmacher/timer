@@ -6,6 +6,7 @@ body {
     overflow: hidden;
     font-family: Arial;
     user-select: none;
+    -webkit-user-select: none;
 }
 
 svg {
@@ -13,15 +14,19 @@ svg {
     width: 100%;
     transform: rotate(-90deg) scale(1, -1);
     user-select: none;
+    -webkit-user-select: none;
+    fill: transparent;
+}
+
+circle {
+    fill: transparent;
 }
 
 #fives {
-    fill: white;
     stroke: black;
 }
 
 #ones {
-    fill: transparent;
     stroke: black;
 }
 
@@ -29,6 +34,10 @@ svg {
     fill: transparent;
     stroke: red;
     stroke-dasharray: 0, 2000;
+}
+
+.hand {
+    fill: black;
 }
 
 #goGitHub {
@@ -43,28 +52,30 @@ svg {
 #currentTime {
     position: fixed;
     width: 100%;
-    top: 50%;
-    z-index: 1;
-    text-align: center;
+    user-select: none;
+    -webkit-user-select: none;
 }
 
 #info {
+    text-align: center;
     font-size: 4vmin;
-    margin-top: 1em;
+    text-shadow: 0 0 5px white;
+    top: 50%;
+    margin-top: .5em;
+    z-index: 1;
 }
 
 #currentTime {
-    font-size: 15vmin;
-    margin-top: -1.3em;
+    font-size: 5vmin;
+    bottom: 10px;
+    left: 10px;
 }
 
 @media (max-width: 400px),
 (max-height: 400px) {
     #info,
-    #goGitHub {
-        display: none;
-    }
+    #goGitHub,
     #currentTime {
-        margin-top: -.5em;
+        display: none;
     }
 }
