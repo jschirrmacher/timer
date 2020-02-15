@@ -1,20 +1,12 @@
 <html>
-  <head>
+
+<head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <title>Timer</title>
-    <style>
-      html, body {margin: 0; height: 100%; width: 100%; overflow: hidden; font-family: Arial; user-select: none;}
-      h1 {font-size: 20px; text-align: center; position: fixed; width: 100%; top: 50%; margin-top: -.7em; z-index: 1;}
-      svg {height: 100%; width: 100%; transform: rotate(-90deg) scale(1, -1); user-select: none;}
-      #fives {fill: white; stroke: black;}
-      #ones {fill: transparent; stroke: black;}
-      #red {fill: transparent; stroke: red; stroke-dasharray: 0,2000;}
-      #goGitHub {position: absolute; right: 5px; bottom: 5px; text-decoration: none; color: black;}
-      @media (max-width: 400px), (max-height: 400px) { h1, #goGitHub { display: none; }}
-    </style>
-  </head>
-  <body>
-    <h1>Drag the mouse or touch to setup timer</h1>
+    <link rel="stylesheet" href="styles.css"></link>
+</head>
+
+<body>
     <svg id="timer" viewBox="0 0 1000 1000">
     </svg>
     <audio id="sound">
@@ -23,95 +15,12 @@
       <source src="A-Tone.wav" type="audio/wav">
     </audio>
 
+    <div id="info">Drag the mouse or touch to setup timer</div>
+    <div id="currentTime"></div>
+
     <a id="goGitHub" href="https://github.com/jschirrmacher/timer" target="_blank">View on GitHub</a>
 
-    <script>
-      const match = location.search.match(/value=(\d+)/) || [0, 15 * 60]
-      let value = 'ontouchstart' in window ? 0 : Math.min(3600, Math.max(0, match[1]))
-      
-      const config = {
-        radius: 180,
-        tickWidth: 10,
-        tickLength: 30,
-        fivesLength: 60,
-        redSpacing: 20
-      }
-      config.ticks = config.radius * 2 * Math.PI
-      let inSet = false
-      let playSound = 0
+    <script src="script.js"></script>
+</body>
 
-      const sound = document.getElementById('sound')
-      const svg = document.getElementById('timer')
-      svg.appendChild(createTicks('fives', 12, config.fivesLength))
-      svg.appendChild(createTicks('fives', 60, config.tickLength))
-      const timer = createCircle('red', config.radius, '')
-      svg.appendChild(timer)
-
-      updateTimer()
-      window.setInterval(decrementToZero, 1000)
-      bindHandler(svg, 'mousedown touchstart', handleStart)
-      bindHandler(svg, 'mouseup touchend', handleEnd)
-      bindHandler(svg, 'mousemove touchmove', handleMove)
-      sound.addEventListener('ended', () => {
-        if (--playSound) {
-          sound.play()
-        }
-      })
-
-      function bindHandler(el, events, listener) {
-        events.split(' ').forEach(event => el.addEventListener(event, listener))
-      }
-
-      function handleStart(event) {
-        inSet = true
-        sound.play()
-        sound.pause()
-      }
-      function handleMove(event) {
-        if (inSet) {
-          event.preventDefault()
-          const pos = event.type === 'touchmove' ? event.changedTouches[0] : event
-          const r = svg.getBoundingClientRect()
-          const deltaX = pos.clientX - r.x - r.width / 2
-          const deltaY = pos.clientY - r.y - r.height / 2
-          value = ((270 - Math.atan2(deltaY, deltaX) * (180 / Math.PI)) % 360) * 10
-          updateTimer()
-        }
-      }
-      function handleEnd(event) {
-        inSet = false
-      }
-      
-      function updateTimer() {
-        timer.setAttribute('style', 'stroke-width: ' + (config.radius) * 2 + '; stroke-dasharray: ' + (value / 3600 * config.ticks) + ',2000')
-      }
-
-      function decrementToZero() {
-        if (value > 0) {
-          value--
-          updateTimer()
-          if (value <= 0) {
-            playSound = 3
-            sound.play()
-          }
-        }
-      }
-
-      function createTicks(id, count, length) {
-        const radius = config.radius * 2 + config.redSpacing + length / 2
-        const strokeArray = config.tickWidth + ',' + (radius * 2 * Math.PI / count - config.tickWidth)
-        return createCircle(id, radius, length, strokeArray)
-      }
-
-      function createCircle(id, radius, strokeWidth, dashArray) {
-        const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle')
-        circle.id = id
-        circle.setAttribute('cx', 500)
-        circle.setAttribute('cy', 500)
-        circle.setAttribute('r', radius)
-        circle.setAttribute('style', 'stroke-width: ' + strokeWidth + '; stroke-dasharray: ' + dashArray)
-        return circle
-      }
-    </script>
-  </body>
 </html>

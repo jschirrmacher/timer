@@ -1,0 +1,70 @@
+html,
+body {
+    margin: 0;
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
+    font-family: Arial;
+    user-select: none;
+}
+
+svg {
+    height: 100%;
+    width: 100%;
+    transform: rotate(-90deg) scale(1, -1);
+    user-select: none;
+}
+
+#fives {
+    fill: white;
+    stroke: black;
+}
+
+#ones {
+    fill: transparent;
+    stroke: black;
+}
+
+#red {
+    fill: transparent;
+    stroke: red;
+    stroke-dasharray: 0, 2000;
+}
+
+#goGitHub {
+    position: absolute;
+    right: 5px;
+    bottom: 5px;
+    text-decoration: none;
+    color: black;
+}
+
+#info,
+#currentTime {
+    position: fixed;
+    width: 100%;
+    top: 50%;
+    z-index: 1;
+    text-align: center;
+}
+
+#info {
+    font-size: 4vmin;
+    margin-top: 1em;
+}
+
+#currentTime {
+    font-size: 15vmin;
+    margin-top: -1.3em;
+}
+
+@media (max-width: 400px),
+(max-height: 400px) {
+    #info,
+    #goGitHub {
+        display: none;
+    }
+    #currentTime {
+        margin-top: -.5em;
+    }
+}
