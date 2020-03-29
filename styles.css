@@ -58,9 +58,10 @@ circle {
 
 #info {
     text-align: center;
-    font-size: 4vmin;
+    font-size: 3vmin;
+    color: grey;
     text-shadow: 0 0 5px white;
-    top: 50%;
+    top: 66%;
     margin-top: .5em;
     z-index: 1;
 }
