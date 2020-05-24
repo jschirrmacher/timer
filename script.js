@@ -19,7 +19,7 @@ const currentTime = document.getElementById('currentTime')
 const sound = document.getElementById('sound')
 const svg = document.getElementById('timer')
 svg.appendChild(createTicks('fives', 12, config.fivesLength))
-svg.appendChild(createTicks('fives', 60, config.tickLength))
+svg.appendChild(createTicks('ones', 60, config.tickLength))
 const timer = createCircle('red', config.radius, '')
 svg.appendChild(timer)
 const minute = createHand('minute', 350)
@@ -86,15 +86,16 @@ function alarm() {
 
 function updateTimer() {
     value = (alarmTime - new Date()) / 1000
-    if (value >= 0) {
-        timer.setAttribute('style', 'stroke-width: ' + (config.radius) * 2 + '; stroke-dasharray: ' + (value / 3600 * config.ticks) + ',2000')
-    } else {
-        timer.removeAttribute('style')
-    }
     const now = new Date()
     const hourPos = -(now.getHours() * 60 + now.getMinutes()) / 2
     const minutePos = -(now.getMinutes() * 60 + now.getSeconds()) / 10
+    const valueDeg = value/3600*360
     minute.setAttribute('style', 'transform: translate(50%,50%) rotate(' + minutePos + 'deg)')
+    if (value >= 0) {
+        timer.setAttribute('style', 'transform: translate(50%, 50%) rotate(' + (minutePos -valueDeg) + 'deg) translate(-50%, -50%); '+'stroke-width: ' + (config.radius) * 2 + '; stroke-dasharray: ' + (value / 3600 * config.ticks) + ',2000')
+    } else {
+        timer.removeAttribute('style')
+    }
     hour.setAttribute('style', 'transform: translate(50%,50%) rotate(' + hourPos + 'deg)')
     currentTime.innerText = (new Date()).toLocaleTimeString()
 }
