@@ -35,6 +35,11 @@ circle {
     stroke: red;
     stroke-dasharray: 0, 2000;
 }
+#green {
+    fill: transparent;
+    stroke: rgba(0,128,0,0.5);
+    stroke-dasharray: 0, 2000;
+}
 
 .hand {
     fill: black;
