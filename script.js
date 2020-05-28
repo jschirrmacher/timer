@@ -59,7 +59,10 @@ function handleMove(event) {
         const r = svg.getBoundingClientRect()
         const deltaX = pos.clientX - r.x - r.width / 2
         const deltaY = pos.clientY - r.y - r.height / 2
-        value = ((270 - Math.atan2(deltaY, deltaX) * (180 / Math.PI)) % 360) * 10
+        const now = new Date()
+        const minutePos = (now.getMinutes() * 60 + now.getSeconds()) / 10
+        const valueDeg = -(minutePos - 90 + Math.atan2(-deltaY, deltaX) * (180 / Math.PI))
+        value = ((valueDeg % 360) + 360) % 360 * 10
         setupAlarm(value)
         updateTimer()
     }
