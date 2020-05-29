@@ -62,6 +62,7 @@ function initTimer(event) {
     start = 'ontouchstart' in window ? 0 : Math.min(3600, Math.max(0, match[1]*60))
 
 //init the green section
+//init the green section
     const now = new Date()
     const valueDeg = value/3600*360
     const startMinutePos = -(now.getMinutes() * 60 + now.getSeconds()) / 10
@@ -132,7 +133,7 @@ function updateTimer() {
         timer.removeAttribute('style')
     }
     hour.setAttribute('style', 'transform: translate(50%,50%) rotate(' + hourPos + 'deg)')
-    currentTime.innerText = (new Date()).toLocaleTimeString()+getComputedStyle(document.querySelector('duration')).getPropertyValue('--timer-duration')+" - "
+    currentTime.innerText = (new Date()).toLocaleTimeString()
 }
 
 function createTicks(id, count, length) {
