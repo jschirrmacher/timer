@@ -19,3 +19,58 @@ Click on image to try the timer yourself
 - Works in the background (you don't need to keep the window in front)
 - No installation needed, runs [just here](https://jschirrmacher.github.io/timer)
 - No fees, no signup, no tracking
+- optimized for OBS
+
+## How to use with [OBS](https://obsproject.com/)
+
+With OBS, you can use this timer in your next live stream or video conference. To do so, add the timer as `Browser` Element.
+The standard user defined CSS added by OBS will already render the background transparent.
+To remove the text elements from the timer, style this elements with `display: none`:
+
+```
+body { 
+    background-color: rgba(0, 0, 0, 0); 
+    margin: 0px auto; 
+    overflow: hidden; 
+}
+#info, #goGitHub, #currentTime {
+    display: none;
+}
+```
+
+Feel free to change additional styles to fit your design.
+
+When use use the timer installed on a web server, you can just use the URL and append the parameter `duration` with the duration in minutes.
+For example, `timer.html?duration=13` would give you a 13 minutes timer.
+
+Since there is no good way to interact with the timer while embedded in an OBS scene, it makes sense to create an extra scene for the timer and mark the checkbox `Refresh browser when scene becomes active`.
+This will let you start the timer by switching the scene.
+
+To speed up the refresh of your timer, it makes sense to reference it as local file from OBS.
+In that case you use the ability to specify the duration via a URL parameter, but we have a solution for that.
+
+You can specify the duration as custom CSS style!
+Add 
+
+```
+duration {
+    --timer-duration: 25;
+}
+```
+to your custom CSS and it will obey your wish.
+
+Here is a full custom CSS for you to copy:
+
+```
+body { 
+    background-color: rgba(0, 0, 0, 0); 
+    margin: 0px auto; 
+    overflow: hidden; 
+}
+#info, #goGitHub, #currentTime {
+    display: none;
+}
+duration {
+    --timer-duration: 5;
+}
+```
