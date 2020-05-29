@@ -1,6 +1,3 @@
-const match = location.search.match(/value=(\d+)/) || [0, 15 * 60]
-let value = 'ontouchstart' in window ? 0 : Math.min(3600, Math.max(0, match[1]))
-
 const config = {
     radius: 180,
     tickWidth: 10,
@@ -14,13 +11,20 @@ let inSet = false
 let playSound = 0
 let alarmTime
 let alarmTimer
-let startMinutePos = -1
 
 const currentTime = document.getElementById('currentTime')
 const sound = document.getElementById('sound')
 const svg = document.getElementById('timer')
+
+const background = createCircle('background', config.radius*2.3, '1')
+svg.appendChild(background)
+
 svg.appendChild(createTicks('fives', 12, config.fivesLength))
 svg.appendChild(createTicks('ones', 60, config.tickLength))
+
+let startValue = 0
+let value = 0
+//some svg elements
 const timer2 = createCircle('green', config.radius, '')
 svg.appendChild(timer2)
 const timer = createCircle('red', config.radius, '')
@@ -30,12 +34,11 @@ svg.appendChild(minute)
 const hour = createHand('hour', 220)
 svg.appendChild(hour)
 
-setupAlarm(value)
-updateTimer()
-window.setInterval(updateTimer, 1000)
 bindHandler(svg, 'mousedown touchstart', handleStart)
 bindHandler(svg, 'mouseup touchend', handleEnd)
 bindHandler(svg, 'mousemove touchmove', handleMove)
+bindHandler(window, 'load', delayInitTimer)
+
 sound.addEventListener('ended', () => {
     if (--playSound) {
         sound.play()
@@ -46,6 +49,28 @@ function bindHandler(el, events, listener) {
     events.split(' ').forEach(event => el.addEventListener(event, listener))
 }
 
+//dirty hack to wait for OBS to apply custom css
+function delayInitTimer(event) {
+    window.setTimeout(initTimer, 5)
+}
+function initTimer(event) {
+    cssDuration = getComputedStyle(document.querySelector('duration')).getPropertyValue('--timer-duration')
+    match = location.search.match(/duration=(\d+)/) || [0, cssDuration]
+    value = 'ontouchstart' in window ? 0 : Math.min(3600, Math.max(0, match[1]*60))
+    cssStart = getComputedStyle(document.querySelector('duration')).getPropertyValue('--timer-start')
+    match = location.search.match(/start=(\d+)/) || [0, cssStart]
+    start = 'ontouchstart' in window ? 0 : Math.min(3600, Math.max(0, match[1]*60))
+
+//init the green section
+    const now = new Date()
+    const valueDeg = value/3600*360
+    const startMinutePos = -(now.getMinutes() * 60 + now.getSeconds()) / 10
+    timer2.setAttribute('style', 'transform: translate(50%, 50%) rotate(' + (startMinutePos -valueDeg) + 'deg) translate(-50%, -50%); '+'stroke-width: ' + (config.radius) * 2 + '; stroke-dasharray: ' + (value / 3600 * config.ticks) + ',2000')
+
+    setupAlarm(value)
+    updateTimer()
+    window.setInterval(updateTimer, 1000)
+}
 function handleStart(event) {
     inSet = true
     sound.play()
@@ -71,6 +96,10 @@ function handleMove(event) {
 function handleEnd() {
     inSet = false
     setupAlarm(value)
+    const now = new Date()
+    const valueDeg = value/3600*360
+    const startMinutePos = -(now.getMinutes() * 60 + now.getSeconds()) / 10
+    timer2.setAttribute('style', 'transform: translate(50%, 50%) rotate(' + (startMinutePos -valueDeg) + 'deg) translate(-50%, -50%); '+'stroke-width: ' + (config.radius) * 2 + '; stroke-dasharray: ' + (value / 3600 * config.ticks) + ',2000')
 }
 
 function setupAlarm(seconds) {
@@ -95,21 +124,19 @@ function updateTimer() {
     const now = new Date()
     const hourPos = -(now.getHours() * 60 + now.getMinutes()) / 2
     const minutePos = -(now.getMinutes() * 60 + now.getSeconds()) / 10
-    if (startMinutePos===-1) {startMinutePos=minutePos}
     const valueDeg = value/3600*360
     minute.setAttribute('style', 'transform: translate(50%,50%) rotate(' + minutePos + 'deg)')
     if (value >= 0) {
         timer.setAttribute('style', 'transform: translate(50%, 50%) rotate(' + (minutePos -valueDeg) + 'deg) translate(-50%, -50%); '+'stroke-width: ' + (config.radius) * 2 + '; stroke-dasharray: ' + (value / 3600 * config.ticks) + ',2000')
-        timer2.setAttribute('style', 'transform: translate(50%, 50%) rotate(' + (startMinutePos -valueDeg) + 'deg) translate(-50%, -50%); '+'stroke-width: ' + (config.radius) * 2 + '; stroke-dasharray: ' + (value / 3600 * config.ticks) + ',2000')
     } else {
         timer.removeAttribute('style')
     }
     hour.setAttribute('style', 'transform: translate(50%,50%) rotate(' + hourPos + 'deg)')
-    currentTime.innerText = (new Date()).toLocaleTimeString()
+    currentTime.innerText = (new Date()).toLocaleTimeString()+getComputedStyle(document.querySelector('duration')).getPropertyValue('--timer-duration')+" - "
 }
 
 function createTicks(id, count, length) {
-    const radius = config.radius * 2 + config.redSpacing + length / 2
+    const radius = config.radius * 2 + config.redSpacing - length / 2
     const strokeArray = config.tickWidth + ',' + (radius * 2 * Math.PI / count - config.tickWidth)
     return createCircle(id, radius, length, strokeArray)
 }

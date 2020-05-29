@@ -8,7 +8,9 @@ body {
     user-select: none;
     -webkit-user-select: none;
 }
-
+duration {
+    --timer-duration: 20;
+}
 svg {
     height: 100%;
     width: 100%;
@@ -29,10 +31,12 @@ circle {
 #ones {
     stroke: black;
 }
-
+#background {
+    fill: rgba(255,255,255,0.5);
+}
 #red {
     fill: transparent;
-    stroke: red;
+    stroke: rgba(255,0,0,0.5);
     stroke-dasharray: 0, 2000;
 }
 #green {
