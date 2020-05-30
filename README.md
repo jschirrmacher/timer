@@ -6,7 +6,7 @@ Regrettably, whenever you need it, you left it home. And if only, because it is 
 
 Now you can use this small application to use it without needing to carry more than you already have - your computer.
 
-[![Timer](timer.png)](https://rdmueller.github.io/timer/?duration=1200)
+[![Timer](timer.png)](https://jschirrmacher.github.io/timer/?duration=1200)
 Click on image to try the timer yourself
 
 ## Features
@@ -43,7 +43,7 @@ Feel free to change additional styles to fit your design.
 When use use the timer installed on a web server, you can just use the URL and append the parameter `duration` with the duration in minutes.
 For example, `timer.html?duration=13` would give you a 13 minutes timer.
 
-https://rdmueller.github.io/timer/index.html?duration=13
+https://jschirrmacher.github.io/timer/index.html?duration=13
 
 Since there is no good way to interact with the timer while embedded in an OBS scene, it makes sense to create an extra scene for the timer and mark the checkbox `Refresh browser when scene becomes active`.
 This will let you start the timer by switching the scene.
