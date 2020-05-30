@@ -1,4 +1,4 @@
-# Simple Timer
+# Agile Timer
 
 All you agile practitioners, you know these nice devices which can be placed on the desk and show the remaining time in the current time box.
 
@@ -25,25 +25,20 @@ Click on image to try the timer yourself
 
 With OBS, you can use this timer in your next live stream or video conference. To do so, add the timer as `Browser` Element.
 The standard user defined CSS added by OBS will already render the background transparent.
-To remove the text elements from the timer, style this elements with `display: none`:
+To remove the text elements from the timer, there are two ways to make that happen. Either,
+you call the timer with a query parameter `hide-text=1` or, you use a custom style in your
+ OBS configuration:
 
-```
-body { 
-    background-color: rgba(0, 0, 0, 0); 
-    margin: 0px auto; 
-    overflow: hidden; 
-}
-#info, #goGitHub, #currentTime {
-    display: none;
+```CSS
+.settings {
+  --hide-text: 1;
 }
 ```
 
 Feel free to change additional styles to fit your design.
 
 If you use the timer installed on a web server, you can just use the URL and append the parameter `duration` with the duration in minutes.
-For example, `timer.html?duration=13` would give you a 13 minutes timer.
-
-https://jschirrmacher.github.io/timer/index.html?duration=13
+For example, `https://timer.digital-wachsen.de/?duration=13` would give you a 13 minutes timer.
 
 Since there is no good way to interact with the timer while embedded in an OBS scene, it makes sense to create an extra scene for the timer and mark the checkbox `Refresh browser when scene becomes active`.
 This will let you start the timer by switching the scene.
@@ -52,29 +47,35 @@ To speed up the refresh of your timer, it makes sense to reference it as local f
 In that case you don't have the ability to specify the duration via a URL parameter, but we have a solution for that.
 
 You can specify the duration as custom CSS style!
-Add 
+Add
 
-```
-duration {
-    --timer-duration: 25;
+```CSS
+.settings {
+    --duration: 25;
 }
 ```
+
 to your custom CSS and it will obey your wish.
 
 (another way is to specify a _local_ url with the file:-Protocol)
 
-Here is a full custom CSS for you to copy:
+Here is a full custom CSS with all currently available options:
 
+```CSS
+.settings {
+    --radius: 180;      /* clock radius in pixels */
+    --tick-width: 10;   /* width of ticks */
+    --tick-length: 30;  /* length of ticks */
+    --fives-length: 60; /* length of fives */
+    --red-spacing: 20;  /* space for red area to outside of clock */
+    --hand-width: 10;   /* width of hands */
+    --duration: 5;      /* duration of timer in seconds */
+    --hide-text: 1;     /* set to 0 or remove completely to show the texts */
+}
 ```
-body { 
-    background-color: rgba(0, 0, 0, 0); 
-    margin: 0px auto; 
-    overflow: hidden; 
-}
-#info, #goGitHub, #currentTime {
-    display: none;
-}
-duration {
-    --timer-duration: 5;
-}
-```
+
+Each of these options (or all of them) can be set via URL as well:
+
+https://timer.digital-wachsen.de/?duration=5&hide-text=1
+
+URL options will override css options.

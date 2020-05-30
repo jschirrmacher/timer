@@ -24,7 +24,8 @@
 <body>
     <div id="info">Drag the mouse or touch to setup timer</div>
     <div id="currentTime"></div>
-    <duration></duration>
+    <div id="show-settings">⚙</div>
+
     <svg id="timer" viewBox="0 0 1000 1000">
     </svg>
     <audio id="sound">
@@ -34,6 +35,35 @@
     </audio>
 
     <a id="goGitHub" href="https://github.com/jschirrmacher/timer" target="_blank">View on GitHub</a>
+
+    <div class="popup" id="settings">
+      <form>
+        <span class="close">×</span>
+        <h2>Settings</h2>
+
+        <label>
+          <input type="checkbox" id="hide-text">
+          Hide text
+        </label>
+
+        <label>
+          Radius
+          <input type="number" id="radius">
+        </label>
+
+        <label>
+          Tick width
+          <input type="number" id="tick-width">
+        </label>
+
+        <label>
+          Tick length
+          <input type="number" id="tick-length">
+        </label>
+      </form>
+    </div>
+
+    <div class="settings"></div>
 
     <script src="script.js"></script>
 </body>

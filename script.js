@@ -1,10 +1,10 @@
 const config = {
-    radius: 180,
-    tickWidth: 10,
-    tickLength: 30,
-    fivesLength: 60,
-    redSpacing: 20,
-    handWidth: 10
+    radius: +getSetting('radius'),
+    tickWidth: +getSetting('tick-width'),
+    tickLength: +getSetting('tick-length'),
+    fivesLength: +getSetting('fives-length'),
+    redSpacing: +getSetting('red-spacing'),
+    handWidth: +getSetting('hand-width')
 }
 config.ticks = config.radius * 2 * Math.PI
 let inSet = false
@@ -15,6 +15,9 @@ let alarmTimer
 const currentTime = document.getElementById('currentTime')
 const sound = document.getElementById('sound')
 const svg = document.getElementById('timer')
+
+const showSettings = document.getElementById('show-settings')
+const settings = document.getElementById('settings')
 
 const background = createCircle('background', config.radius*2.3, '1')
 svg.appendChild(background)
@@ -38,31 +41,49 @@ bindHandler(svg, 'mousedown touchstart', handleStart)
 bindHandler(svg, 'mouseup touchend', handleEnd)
 bindHandler(svg, 'mousemove touchmove', handleMove)
 bindHandler(window, 'load', delayInitTimer)
-
-sound.addEventListener('ended', () => {
+bindHandler(showSettings, 'click', () => settings.classList.add('open'))
+bindHandler('.popup .close', 'click', event => event.target.closest('.popup').classList.remove('open'))
+bindHandler('#hide-text', 'change', event => setupInfoText(event.target.checked))
+bindHandler(sound, 'ended', () => {
     if (--playSound) {
         sound.play()
     }
 })
 
-function bindHandler(el, events, listener) {
-    events.split(' ').forEach(event => el.addEventListener(event, listener))
+function bindHandler(selector, events, listener) {
+    const elements = typeof selector === 'string' ? document.querySelectorAll(selector) : [selector]
+    events.split(' ').forEach(event => {
+        elements.forEach(el => el.addEventListener(event, listener))
+    })
 }
 
-//dirty hack to wait for OBS to apply custom css
+function setupInfoText(set) {
+    document.body.classList.toggle('hide-text', set)
+    document.getElementById('hide-text').checked = set
+}
+
+setupInfoText(!!+getSetting('hide-text'))
+
+//dirty hack to wait for external systems like OBS to apply custom css
 function delayInitTimer(event) {
     window.setTimeout(initTimer, 5)
 }
-function initTimer(event) {
-    cssDuration = getComputedStyle(document.querySelector('duration')).getPropertyValue('--timer-duration')
-    match = location.search.match(/duration=(\d+)/) || [0, cssDuration]
-    value = 'ontouchstart' in window ? 0 : Math.min(3600, Math.max(0, match[1]*60))
-    cssStart = getComputedStyle(document.querySelector('duration')).getPropertyValue('--timer-start')
-    match = location.search.match(/start=(\d+)/) || [0, cssStart]
-    start = 'ontouchstart' in window ? 0 : Math.min(3600, Math.max(0, match[1]*60))
 
-//init the green section
-//init the green section
+function getSetting(name) {
+    const el = document.querySelector('.settings')
+    const cssValue = getComputedStyle(el).getPropertyValue('--' + name)
+    const match = location.search.match(new RegExp(name + '=(\\w+)')) || [undefined, cssValue]
+    return match[1]
+}
+
+function minMax(value, min, max) {
+    return Math.min(max, Math.max(min, value))
+}
+
+function initTimer(event) {
+    const value = 'ontouchstart' in window ? 0 : minMax(getSetting('duration') * 60, 0, 3600)
+
+    //init the green section
     const now = new Date()
     const valueDeg = value/3600*360
     const startMinutePos = -(now.getMinutes() * 60 + now.getSeconds()) / 10
@@ -72,6 +93,7 @@ function initTimer(event) {
     updateTimer()
     window.setInterval(updateTimer, 1000)
 }
+
 function handleStart(event) {
     inSet = true
     sound.play()

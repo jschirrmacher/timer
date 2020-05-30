@@ -89,3 +89,64 @@ circle {
         display: none;
     }
 }
+
+body.hide-text #info,
+body.hide-text #goGitHub,
+body.hide-text #currentTime
+{
+    display: none;
+}
+
+#show-settings {
+    cursor: pointer;
+    position: absolute;
+    top: 5px;
+    right: 10px;
+    font-size: 40px;
+}
+
+#show-settings:hover {
+    background: lightgrey;
+}
+
+.popup.open {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0,0,0,0.7);
+    z-index: 2;
+}
+
+.popup form {
+    position: relative;
+    width: 800px;
+    margin: 2em auto;
+    background: white;
+    min-height: 80%;
+    padding: 20px;
+}
+
+.popup .close {
+    font-size: 28px;
+    cursor: pointer;
+    position: absolute;
+    top: 5px;
+    right: 8px;
+}
+
+.popup .close:hover {
+    background: lightgrey;
+}
+
+.settings {
+    --radius: 180;
+    --tick-width: 10;
+    --tick-length: 30;
+    --fives-length: 60;
+    --red-spacing: 20;
+    --hand-width: 10;
+    --duration: 20;
+    --hide-text: 0;
+}
