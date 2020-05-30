@@ -40,7 +40,7 @@ body {
 
 Feel free to change additional styles to fit your design.
 
-When use use the timer installed on a web server, you can just use the URL and append the parameter `duration` with the duration in minutes.
+If you use the timer installed on a web server, you can just use the URL and append the parameter `duration` with the duration in minutes.
 For example, `timer.html?duration=13` would give you a 13 minutes timer.
 
 https://jschirrmacher.github.io/timer/index.html?duration=13
@@ -49,7 +49,7 @@ Since there is no good way to interact with the timer while embedded in an OBS s
 This will let you start the timer by switching the scene.
 
 To speed up the refresh of your timer, it makes sense to reference it as local file from OBS.
-In that case you use the ability to specify the duration via a URL parameter, but we have a solution for that.
+In that case you don't have the ability to specify the duration via a URL parameter, but we have a solution for that.
 
 You can specify the duration as custom CSS style!
 Add 
@@ -60,6 +60,8 @@ duration {
 }
 ```
 to your custom CSS and it will obey your wish.
+
+(another way is to specify a _local_ url with the file:-Protocol)
 
 Here is a full custom CSS for you to copy:
 
