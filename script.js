@@ -43,7 +43,7 @@ bindHandler(svg, 'mousemove touchmove', handleMove)
 bindHandler(window, 'load', delayInitTimer)
 bindHandler(showSettings, 'click', () => settings.classList.add('open'))
 bindHandler('.popup .close', 'click', event => event.target.closest('.popup').classList.remove('open'))
-bindHandler('#hide-text', 'change', event => setupInfoText(event.target.checked))
+bindHandler('#hide-text', 'change', event => setupSetting(event.target.checked))
 bindHandler(sound, 'ended', () => {
     if (--playSound) {
         sound.play()
@@ -57,12 +57,30 @@ function bindHandler(selector, events, listener) {
     })
 }
 
-function setupInfoText(set) {
-    document.body.classList.toggle('hide-text', set)
-    document.getElementById('hide-text').checked = set
+function setupSetting(name, value) {
+    const el = document.getElementById(name)
+    if (el.type === 'checkbox') {
+        el.checked = !!+value
+        document.body.classList.toggle(name, !!+value)
+    } else {
+        el.value = +value
+    }
+    
 }
 
-setupInfoText(!!+getSetting('hide-text'))
+const allSettings = [
+    'hide-text',
+    'radius',
+    'tick-width',
+    'tick-length',
+    'fives-length',
+    'red-spacing',
+    'hand-width',
+    'duration',
+]
+allSettings.forEach(setting => {
+    setupSetting(setting, getSetting(setting))
+})
 
 //dirty hack to wait for external systems like OBS to apply custom css
 function delayInitTimer(event) {
