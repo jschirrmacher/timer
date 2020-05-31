@@ -122,6 +122,8 @@ body.hide-text #currentTime
 .popup form {
     position: relative;
     width: 800px;
+    max-width: 100%;
+    box-sizing: border-box;
     margin: 2em auto;
     background: white;
     min-height: 80%;
@@ -138,6 +140,16 @@ body.hide-text #currentTime
 
 .popup .close:hover {
     background: lightgrey;
+}
+
+label {
+    display: block;
+    line-height: 1.6em;
+}
+
+input {
+    left: 120px;
+    position: absolute;
 }
 
 .settings {
