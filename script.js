@@ -43,7 +43,6 @@ bindHandler(svg, 'mousemove touchmove', handleMove)
 bindHandler(window, 'load', delayInitTimer)
 bindHandler(showSettings, 'click', () => settings.classList.add('open'))
 bindHandler('.popup .close', 'click', event => event.target.closest('.popup').classList.remove('open'))
-bindHandler('#hide-text', 'change', event => setupSetting(event.target.checked))
 bindHandler(sound, 'ended', () => {
     if (--playSound) {
         sound.play()
@@ -57,15 +56,13 @@ function bindHandler(selector, events, listener) {
     })
 }
 
-function setupSetting(name, value) {
-    const el = document.getElementById(name)
+function setupSetting(el, name, value) {
     if (el.type === 'checkbox') {
         el.checked = !!+value
         document.body.classList.toggle(name, !!+value)
     } else {
         el.value = +value
     }
-    
 }
 
 const allSettings = [
@@ -75,11 +72,17 @@ const allSettings = [
     'tick-length',
     'fives-length',
     'red-spacing',
-    'hand-width',
-    'duration',
+    'hand-width'
 ]
 allSettings.forEach(setting => {
-    setupSetting(setting, getSetting(setting))
+    const el = document.getElementById(setting)
+    if (el) {
+        setupSetting(el, setting, getSetting(setting))
+        bindHandler(el, 'change', event => {
+            const value = event.target.type === 'checkbox' ? event.target.checked : event.target.value
+            setupSetting(el, setting, value)
+        })
+    }
 })
 
 //dirty hack to wait for external systems like OBS to apply custom css
