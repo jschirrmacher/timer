@@ -92,8 +92,10 @@ function delayInitTimer(event) {
 
 function getSetting(name) {
     const el = document.querySelector('.settings')
-    const cssValue = getComputedStyle(el).getPropertyValue('--' + name)
+    let cssValue = getComputedStyle(el).getPropertyValue('--' + name)
+    if (cssValue === "") {cssValue = undefined}
     const match = location.search.match(new RegExp(name + '=(\\w+)')) || [undefined, cssValue]
+    console.log("name: "+name+" css: "+cssValue+" match: "+match[1])
     return match[1]
 }
 
@@ -102,14 +104,36 @@ function minMax(value, min, max) {
 }
 
 function initTimer(event) {
-    const value = 'ontouchstart' in window ? 0 : minMax(getSetting('duration') * 60, 0, 3600)
+    let start = getSetting('start')
+    let end = getSetting('end')
+    let duration = getSetting('duration')
+
+    const now = new Date()
+    console.log ("start: "+start+" duration: "+duration+" end: "+end)
+    if (start === undefined && (end!==undefined) && (duration!==undefined)) {
+        console.log(1)
+        start = -(now.getMinutes() * 60 + now.getSeconds())
+    } 
+    if (end!==undefined && duration!==undefined){
+        console.log(2)
+        start = end-duration
+    }
+    console.log("start: "+start)
+    if (end === undefined) {
+        console.log(3)
+        end = start+duration
+    }
+    if (duration === undefined) {
+        console.log(4)
+        duration = end - start
+    }
+    const value = 'ontouchstart' in window ? 0 : minMax(duration, 0, 3600)
+    const valueDeg = value/3600*360
 
     //init the green section
-    const now = new Date()
-    const valueDeg = value/3600*360
-    const startMinutePos = -(now.getMinutes() * 60 + now.getSeconds()) / 10
-    timer2.setAttribute('style', 'transform: translate(50%, 50%) rotate(' + (startMinutePos -valueDeg) + 'deg) translate(-50%, -50%); '+'stroke-width: ' + (config.radius) * 2 + '; stroke-dasharray: ' + (value / 3600 * config.ticks) + ',2000')
-
+    const startMinutePos = start/10
+    timer2.setAttribute('style', 'transform: translate(50%, 50%) rotate(' + (start -valueDeg) + 'deg) translate(-50%, -50%); '+'stroke-width: ' + (config.radius) * 2 + '; stroke-dasharray: ' + (value / 3600 * config.ticks) + ',2000')
+    console.log ("start: "+start+" duration: "+duration+" end: "+end)
     setupAlarm(value)
     updateTimer()
     window.setInterval(updateTimer, 1000)
