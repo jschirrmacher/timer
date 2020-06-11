@@ -109,30 +109,39 @@ function initTimer(event) {
     let duration = getSetting('duration')
 
     const now = new Date()
+    console.log("----------")
     console.log ("start: "+start+" duration: "+duration+" end: "+end)
-    if (start === undefined && (end!==undefined) && (duration!==undefined)) {
+    //let's see if we have to use the current time for start...
+    let endOrDurationUndefined = (end===undefined && duration!==undefined) || (end!==undefined && duration===undefined)
+    if (start === undefined &&  endOrDurationUndefined ) {
         console.log(1)
-        start = -(now.getMinutes() * 60 + now.getSeconds())
+        start = now.getMinutes()+now.getSeconds()/60
     } 
     if (end!==undefined && duration!==undefined){
         console.log(2)
-        start = end-duration
+        start = Number(end)-Number(duration)
     }
     console.log("start: "+start)
+    console.log("dur: "+duration)
     if (end === undefined) {
         console.log(3)
-        end = start+duration
+        end = Number(start)+Number(duration)
     }
     if (duration === undefined) {
         console.log(4)
-        duration = end - start
+        duration = Number(end) - Number(start)
     }
+    //from minutes to seconds
+    start = start*60
+    end = end*60
+    duration = duration*60
+
     const value = 'ontouchstart' in window ? 0 : minMax(duration, 0, 3600)
     const valueDeg = value/3600*360
 
     //init the green section
-    const startMinutePos = start/10
-    timer2.setAttribute('style', 'transform: translate(50%, 50%) rotate(' + (start -valueDeg) + 'deg) translate(-50%, -50%); '+'stroke-width: ' + (config.radius) * 2 + '; stroke-dasharray: ' + (value / 3600 * config.ticks) + ',2000')
+    const startMinutePos = start/60
+    timer2.setAttribute('style', 'transform: translate(50%, 50%) rotate(' + (-(end)/10) + 'deg) translate(-50%, -50%); '+'stroke-width: ' + (config.radius) * 2 + '; stroke-dasharray: ' + (value / 3600 * config.ticks) + ',2000')
     console.log ("start: "+start+" duration: "+duration+" end: "+end)
     setupAlarm(value)
     updateTimer()

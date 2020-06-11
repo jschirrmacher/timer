@@ -8,9 +8,6 @@ body {
     user-select: none;
     -webkit-user-select: none;
 }
-duration {
-    --timer-duration: 20;
-}
 svg {
     height: 100%;
     width: 100%;
@@ -159,6 +156,5 @@ input {
     --fives-length: 60;
     --red-spacing: 20;
     --hand-width: 10;
-    --duration: 20;
     --hide-text: 0;
 }
