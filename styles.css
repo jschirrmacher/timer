@@ -1,3 +1,19 @@
+html {
+    --radius: 380;
+    --spacing: 50;
+    --tick-width: 10;
+    --tick-length: 30;
+    --fives-length: 60;
+    --minute-hand-width: 10;
+    --minute-hand-length: 350;
+    --hour-hand-width: 10;
+    --hour-hand-length: 220;
+    --duration: 20;
+    --hide-text: 0;
+    --relative: 1;
+    --area-opacity: 50;
+}
+
 html,
 body {
     margin: 0;
@@ -8,9 +24,7 @@ body {
     user-select: none;
     -webkit-user-select: none;
 }
-duration {
-    --timer-duration: 20;
-}
+
 svg {
     height: 100%;
     width: 100%;
@@ -20,33 +34,70 @@ svg {
     fill: transparent;
 }
 
+#background {
+    fill: rgba(255,255,255,.5);
+}
+
 circle {
     fill: transparent;
 }
 
+.tick {
+    cx: 50%;
+    cy: 50%;
+}
+
 #fives {
     stroke: black;
+    r: calc(var(--radius) + var(--fives-length));
+    stroke-width: var(--fives-length);
+    stroke-dasharray: var(--tick-width),
+        calc((var(--radius) + var(--fives-length)) * 2 * 3.141592653589793 / 12 - var(--tick-width));
 }
 
 #ones {
     stroke: black;
+    r: calc(var(--radius) + var(--tick-length));
+    stroke-width: var(--tick-length);
+    stroke-dasharray: var(--tick-width),
+        calc((var(--radius) + var(--tick-length)) * 2 * 3.141592653589793 / 60 - var(--tick-width));
 }
-#background {
-    fill: rgba(255,255,255,0.5);
+
+.area {
+    cx: 50%;
+    cy: 50%;
+    transform-origin: center center;
+    r: calc((var(--radius) + var(--spacing)) / 2);
+    stroke-width: calc(var(--radius) - var(--spacing));
+    opacity: var(--area-opacity);
 }
+
 #red {
     fill: transparent;
-    stroke: rgba(255,0,0,0.5);
-    stroke-dasharray: 0, 2000;
+    stroke: rgba(255,0,0,1);
 }
 #green {
     fill: transparent;
-    stroke: rgba(0,128,0,0.5);
-    stroke-dasharray: 0, 2000;
+    stroke: rgba(0,128,0,1);
 }
 
 .hand {
     fill: black;
+    transform-origin: center center;
+}
+
+#minute {
+    width: var(--minute-hand-length);
+    height: var(--minute-hand-width);
+    x: calc(var(--minute-hand-width) * -2 + 50%);
+    y: calc(var(--minute-hand-width) / -2 + 50%);
+}
+
+#hour {
+    width: var(--hour-hand-length);
+    height: var(--hour-hand-width);
+    x: calc(var(--hour-hand-width) * -2 + 50%);
+    y: calc(var(--hour-hand-width) / -2 + 50%);
 }
 
 #goGitHub {
@@ -90,9 +141,9 @@ circle {
     }
 }
 
-body.hide-text #info,
-body.hide-text #goGitHub,
-body.hide-text #currentTime
+html[style^="--hide-text: 1"] #info,
+html[style^="--hide-text: 1"] #goGitHub,
+html[style^="--hide-text: 1"] #currentTime
 {
     display: none;
 }
@@ -101,12 +152,21 @@ body.hide-text #currentTime
     cursor: pointer;
     position: absolute;
     top: 5px;
-    right: 10px;
+    right: 5px;
     font-size: 40px;
+    width: 40px;
+    height: 40px;
+    text-align: center;
+    line-height: 0.95;
+    transition: .3s all;
 }
 
 #show-settings:hover {
-    background: lightgrey;
+    background: #dddddd;
+}
+
+#show-settings:active {
+    background: #bbbbbb;
 }
 
 .popup.open {
@@ -142,23 +202,31 @@ body.hide-text #currentTime
     background: lightgrey;
 }
 
+fieldset {
+    margin: .5em;
+}
+
 label {
     display: block;
-    line-height: 1.6em;
+    line-height: 2em;
 }
 
 input {
-    left: 120px;
+    font-size: 16px;
+    padding: 3px;
+    margin-top: 3px;
+    left: 180px;
     position: absolute;
+    width: 70px;
 }
 
-.settings {
-    --radius: 180;
-    --tick-width: 10;
-    --tick-length: 30;
-    --fives-length: 60;
-    --red-spacing: 20;
-    --hand-width: 10;
-    --duration: 20;
-    --hide-text: 0;
+.numeric {
+    text-align: right;
+}
+
+button {
+    padding: 7px 15px;
+    background: white;
+    border: 2px solid #777;
+    border-radius: 5px;
 }
