@@ -26,10 +26,9 @@
 <body>
     <div id="info">Drag the mouse or touch to setup timer</div>
     <div id="currentTime"></div>
+    <svg id="timer" viewBox="0 0 1000 1000"></svg>
     <div id="show-settings">⚙</div>
 
-    <svg id="timer" viewBox="0 0 1000 1000">
-    </svg>
     <audio id="sound">
       <source src="A-Tone.ogg" type="audio/ogg">
       <source src="A-Tone.mp3" type="audio/mpeg">
@@ -43,40 +42,79 @@
         <span class="close">×</span>
         <h2>Settings</h2>
 
-        <label>
-          <input type="checkbox" id="hide-text">
-          Hide text
-        </label>
+        <fieldset>
+          <legend>General configuration</legend>
 
-        <!--label>
-          Radius
-          <input type="number" id="radius">
-        </label>
+          <label>
+            <input type="checkbox" id="hide-text">
+            Hide text
+          </label>
 
-        <label>
-          Tick width
-          <input type="number" id="tick-width">
-        </label>
+          <label>
+            <input type="checkbox" id="relative">
+            Relative time
+          </label>
 
-        <label>
-          Tick length
-          <input type="number" id="tick-length">
-        </label>
+          <label>
+            Area Radius
+            <input type="number" id="radius" class="numeric" data-unit="px">
+          </label>
 
-        <label>
-          Fives length
-          <input type="number" id="fives-length">
-        </label>
+          <label>
+            Space in the middle
+            <input type="number" id="spacing" class="numeric" data-unit="px">
+          </label>
 
-        <label>
-          Red spacing
-          <input type="number" id="red-spacing">
-        </label>
+          <label>
+            Opacity [%]
+            <input type="number" id="area-opacity" class="numeric" data-unit="%">
+          </label>
+        </fieldset>
 
-        <label>
-          Hand width
-          <input type="number" id="hand-width">
-        </label-->
+        <fieldset>
+          <legend>Ticks</legend>
+
+          <label>
+            Tick width
+            <input type="number" id="tick-width" class="numeric" data-unit="px">
+          </label>
+
+          <label>
+            Tick length
+            <input type="number" id="tick-length" class="numeric" data-unit="px">
+          </label>
+
+          <label>
+            Fives length
+            <input type="number" id="fives-length" class="numeric" data-unit="px">
+          </label>
+        </fieldset>
+
+        <fieldset>
+          <legend>Hands</legend>
+
+          <label>
+            Minute width
+            <input type="number" id="minute-hand-width" class="numeric" data-unit="px">
+          </label>
+
+          <label>
+            Minute length
+            <input type="number" id="minute-hand-length" class="numeric" data-unit="px">
+          </label>
+
+          <label>
+            Hour width
+            <input type="number" id="hour-hand-width" class="numeric" data-unit="px">
+          </label>
+
+          <label>
+            Hour length
+            <input type="number" id="hour-hand-length" class="numeric" data-unit="px">
+          </label>
+        </fieldset>
+
+        <button id="saveSettings">Save</button>
       </form>
     </div>
 
