@@ -6,7 +6,7 @@ Regrettably, whenever you need it, you left it home. And if only, because it is 
 
 Now you can use this small application to use it without needing to carry more than you already have - your computer.
 
-[![Timer](timer.png)](https://jschirrmacher.github.io/timer/?duration=20&opacity=100)
+[![Timer](timer.png)](https://timer.digital-wachsen.de/?duration=20&area-opacity=100)
 Click on image to try the timer yourself
 
 ## Features
@@ -17,7 +17,9 @@ Click on image to try the timer yourself
 - Works in all sizes (change your window size, if you like)
 - Shows current time with hands and digital (the latter only if window is at least a minimum size)
 - Works in the background (you don't need to keep the window in front)
-- No installation needed, runs [just here](https://jschirrmacher.github.io/timer)
+- Shows remaining time either relative to minute hand or up to 12
+- Configurable in a lot of aspects (see [configuration section](#configuration))
+- No installation needed, runs [just here](https://timer.digital-wachsen.de)
 - No fees, no signup, no tracking
 - optimized for OBS
 
@@ -30,7 +32,7 @@ you call the timer with a query parameter `hide-text=1` or, you use a custom sty
  OBS configuration:
 
 ```CSS
-.settings {
+html {
   --hide-text: 1;
 }
 ```
@@ -59,6 +61,8 @@ to your custom CSS and it will obey your wish.
 
 (another way is to specify a _local_ url with the file:-Protocol)
 
+## Configuration
+
 Here is a full custom CSS with all currently available options with their default values:
 
 ```CSS
@@ -79,7 +83,7 @@ html {
 }
 ```
 
-Each of these options (or all of them) can be set via URL as well:
+Each of these options (or all of them) can be set via URL as well like in this example:
 
 https://timer.digital-wachsen.de/?duration=5&hide-text=1
 
