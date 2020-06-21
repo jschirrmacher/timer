@@ -12,6 +12,7 @@ html {
     --hide-text: 0;
     --relative: 1;
     --area-opacity: 50;
+    --ringtone: ringtones/A-Tone.mp3
 }
 
 html,
@@ -217,13 +218,20 @@ label {
     line-height: 2em;
 }
 
-input {
+input, select {
     font-size: 16px;
     padding: 3px;
     margin-top: 3px;
     left: 180px;
     position: absolute;
+}
+
+input {
     width: 70px;
+}
+
+select {
+    width: 80px;
 }
 
 .numeric {

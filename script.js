@@ -1,11 +1,9 @@
 let inSet = false
-let playSound = 0
 let alarmTime
 let alarmTimer
 const config = {}
 
 const currentTime = document.getElementById('currentTime')
-const sound = document.getElementById('sound')
 const svg = document.getElementById('timer')
 
 const showSettings = document.getElementById('show-settings')
@@ -40,21 +38,20 @@ function closeCorrespondingDialog(target) {
     target.closest('.popup').classList.remove('open')
 }
 
-bindHandler(document.getElementById('saveSettings'), 'click', saveSettings)
+bindHandler(document.getElementById('saveSettings'), 'click', saveSettings, false)
 bindHandler(svg, 'mousedown touchstart', handleStart)
 bindHandler(svg, 'mouseup touchend', handleEnd)
 bindHandler(svg, 'mousemove touchmove', handleMove)
 bindHandler(window, 'load', delayInitTimer)
 bindHandler(showSettings, 'click', () => settings.classList.add('open'))
 bindHandler('.popup .close', 'click', event => closeCorrespondingDialog(event.target))
-bindHandler(sound, 'ended', () => --playSound && sound.play())
 const hasTouch = 'ontouchstart' in window
 document.documentElement.classList.toggle('hasTouch', hasTouch)
 
-function bindHandler(selector, events, listener) {
+function bindHandler(selector, events, listener, passive = true) {
     const elements = typeof selector === 'string' ? document.querySelectorAll(selector) : [selector]
     events.split(' ').forEach(event => {
-        elements.forEach(el => el.addEventListener(event, listener, {passive: true}))
+        elements.forEach(el => el.addEventListener(event, listener, {passive}))
     })
 }
 
@@ -62,6 +59,11 @@ function setupSetting(el, name, value) {
     if (el.type === 'checkbox') {
         el.checked = !!+value
         config[name] = el.checked
+    } else if (el.type == 'select-one') {
+        const options = Array.from(el.options)
+        const index = options.findIndex(o => o.value === value)
+        el.selectedIndex = Math.max(0, index)
+        config[name] = options[el.selectedIndex].value
     } else {
         el.value = +value
         config[name] = +value
@@ -69,14 +71,15 @@ function setupSetting(el, name, value) {
     document.documentElement.style.setProperty('--' + name, value + (el.dataset.unit || ''))
 }
 
-const allSettings = document.querySelectorAll('#settings form input')
-allSettings.forEach(el => {
-    setupSetting(el, el.id, getSetting(el.id))
-    bindHandler(el, 'change', event => {
-        const value = event.target.type === 'checkbox' ? +event.target.checked : event.target.value
-        setupSetting(el, el.id, value)
+const allSettings = Array.from(document.querySelector('#settings form').elements)
+    .filter(el => el.id)
+    .forEach(el => {
+        setupSetting(el, el.id, getSetting(el.id))
+        bindHandler(el, 'change', event => {
+            const value = event.target.type === 'checkbox' ? +event.target.checked : event.target.value
+            setupSetting(el, el.id, value)
+        })
     })
-})
 
 //dirty hack to wait for external systems like OBS to apply custom css
 function delayInitTimer() {
@@ -134,14 +137,11 @@ function updateTimer() {
 
 function handleStart() {
     inSet = true
-    sound.play()
-    sound.pause()
     timer2.setAttribute('style', 'display: none')
 }
 
 function handleMove(event) {
     if (inSet) {
-        event.preventDefault()
         const pos = event.type === 'touchmove' ? event.changedTouches[0] : event
         const r = svg.getBoundingClientRect()
         const deltaX = pos.clientX - r.x - r.width / 2
@@ -180,6 +180,8 @@ function setupAlarm(seconds) {
 
 function alarm() {
     alarmTimer = 0
-    playSound = 3
+    let playSound = 3
+    const sound = new Audio(config.ringtone)
+    bindHandler(sound, 'ended', () => --playSound && sound.play())
     sound.play()
 }

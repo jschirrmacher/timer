@@ -80,6 +80,7 @@ html {
     --hide-text: 0;             /* set to 0 or remove completely to show the texts */
     --relative: 1;              /* remaining time is relative to current minute hand position, set to 0 to run to 12 */
     --area-opacity: 50;         /* opacity in percent for red and green areas */
+    --ringtone: ringtones/A-Tone.mp3  /* alarm sound file */
 }
 ```
 

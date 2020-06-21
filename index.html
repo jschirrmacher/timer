@@ -31,12 +31,6 @@
     <svg id="timer" viewBox="0 0 1000 1000"></svg>
     <div id="show-settings">⚙</div>
 
-    <audio id="sound">
-      <source src="A-Tone.ogg" type="audio/ogg">
-      <source src="A-Tone.mp3" type="audio/mpeg">
-      <source src="A-Tone.wav" type="audio/wav">
-    </audio>
-
     <a id="goGitHub" href="https://github.com/jschirrmacher/timer" target="_blank" rel="noreferrer">View on GitHub</a>
 
     <div class="popup" id="settings">
@@ -70,6 +64,14 @@
           <label>
             Opacity [%]
             <input type="number" id="area-opacity" class="numeric" data-unit="%">
+          </label>
+
+          <label>
+            Ringtone
+            <select id="ringtone">
+              <option value="ringtones/A-Tone.mp3">A-Tone</option>
+              <option value="ringtones/Bell.mp3">Bell</option>
+            </select>
           </label>
         </fieldset>
 
