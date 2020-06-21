@@ -25,6 +25,12 @@ body {
     -webkit-user-select: none;
 }
 
+html.hasTouch .no-touch,
+html:not(.hasTouch) .touch
+{
+    display: none
+}
+
 svg {
     height: 100%;
     width: 100%;

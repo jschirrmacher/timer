@@ -48,6 +48,8 @@ bindHandler(window, 'load', delayInitTimer)
 bindHandler(showSettings, 'click', () => settings.classList.add('open'))
 bindHandler('.popup .close', 'click', event => closeCorrespondingDialog(event.target))
 bindHandler(sound, 'ended', () => --playSound && sound.play())
+const hasTouch = 'ontouchstart' in window
+document.documentElement.classList.toggle('hasTouch', hasTouch)
 
 function bindHandler(selector, events, listener) {
     const elements = typeof selector === 'string' ? document.querySelectorAll(selector) : [selector]
@@ -77,7 +79,7 @@ allSettings.forEach(el => {
 })
 
 //dirty hack to wait for external systems like OBS to apply custom css
-function delayInitTimer(event) {
+function delayInitTimer() {
     window.setTimeout(initTimer, 5)
 }
 
@@ -101,7 +103,7 @@ function getAreaTransform(seconds, minutePos) {
 }
 
 function initTimer(event) {
-    const value = 'ontouchstart' in window ? 0 : minMax(getSetting('duration') * 60, 0, 3600)
+    const value = hasTouch ? 0 : minMax(getSetting('duration') * 60, 0, 3600)
 
     //init the green section
     const now = new Date()
