@@ -6,7 +6,7 @@ Regrettably, whenever you need it, you left it home. And if only, because it is 
 
 Now you can use this small application to use it without needing to carry more than you already have - your computer.
 
-[![Timer](timer.png)](https://jschirrmacher.github.io/timer/?duration=1200)
+[![Timer](timer.png)](https://jschirrmacher.github.io/timer/?duration=20&opacity=100)
 Click on image to try the timer yourself
 
 ## Features
@@ -50,7 +50,7 @@ You can specify the duration as custom CSS style!
 Add
 
 ```CSS
-.settings {
+html {
     --duration: 25;
 }
 ```
@@ -59,18 +59,23 @@ to your custom CSS and it will obey your wish.
 
 (another way is to specify a _local_ url with the file:-Protocol)
 
-Here is a full custom CSS with all currently available options:
+Here is a full custom CSS with all currently available options with their default values:
 
 ```CSS
-.settings {
-    --radius: 180;      /* clock radius in pixels */
-    --tick-width: 10;   /* width of ticks */
-    --tick-length: 30;  /* length of ticks */
-    --fives-length: 60; /* length of fives */
-    --red-spacing: 20;  /* space for red area to outside of clock */
-    --hand-width: 10;   /* width of hands */
-    --duration: 5;      /* duration of timer in seconds */
-    --hide-text: 1;     /* set to 0 or remove completely to show the texts */
+html {
+    --radius: 380;              /* clock radius in pixels */
+    --spacing: 50;              /* space for red area to outside of clock */
+    --tick-width: 10;           /* width of ticks */
+    --tick-length: 30;          /* length of ticks */
+    --fives-length: 60;         /* length of fives */
+    --minute-hand-width: 10;    /* width of minute hand */
+    --minute-hand-length: 350;  /* length of minute hand */
+    --hour-hand-width: 10;      /* width of hour hand */
+    --hour-hand-length: 220;    /* length of hour hand */
+    --duration: 20;             /* timer duration in minutes */
+    --hide-text: 0;             /* set to 0 or remove completely to show the texts */
+    --relative: 1;              /* remaining time is relative to current minute hand position, set to 0 to run to 12 */
+    --area-opacity: 50;         /* opacity in percent for red and green areas */
 }
 ```
 
