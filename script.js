@@ -2,6 +2,7 @@ let inSet = false
 let playSound = 0
 let alarmTime
 let alarmTimer
+const config = {}
 
 const currentTime = document.getElementById('currentTime')
 const sound = document.getElementById('sound')
@@ -58,8 +59,10 @@ function bindHandler(selector, events, listener) {
 function setupSetting(el, name, value) {
     if (el.type === 'checkbox') {
         el.checked = !!+value
+        config[name] = el.checked
     } else {
         el.value = +value
+        config[name] = +value
     }
     document.documentElement.style.setProperty('--' + name, value + (el.dataset.unit || ''))
 }
@@ -121,7 +124,8 @@ function updateTimer() {
     if (remainingSecs >= 0) {
         timer.setAttribute('style', getAreaTransform(remainingSecs, minutePos))
     } else {
-        timer.removeAttribute('style')
+        timer.setAttribute('style', 'display: none')
+        timer2.setAttribute('style', 'display: none')
     }
     currentTime.innerText = (new Date()).toLocaleTimeString()
 }
@@ -130,6 +134,7 @@ function handleStart() {
     inSet = true
     sound.play()
     sound.pause()
+    timer2.setAttribute('style', 'display: none')
 }
 
 function handleMove(event) {
@@ -139,10 +144,14 @@ function handleMove(event) {
         const r = svg.getBoundingClientRect()
         const deltaX = pos.clientX - r.x - r.width / 2
         const deltaY = pos.clientY - r.y - r.height / 2
-        const now = new Date()
-        const minutePos = (now.getMinutes() * 60 + now.getSeconds()) / 10
-        const valueDeg = -(minutePos - 90 + Math.atan2(-deltaY, deltaX) * (180 / Math.PI))
-        remainingSecs = ((valueDeg % 360) + 360) % 360 * 10
+        if (config.relative) {
+            const now = new Date()
+            const minutePos = (now.getMinutes() * 60 + now.getSeconds()) / 10
+            const valueDeg = -(minutePos - 90 + Math.atan2(-deltaY, deltaX) * (180 / Math.PI))
+            remainingSecs = ((valueDeg % 360) + 360) % 360 * 10
+        } else {
+            remainingSecs = ((270 + Math.atan2(-deltaY, deltaX) * (180 / Math.PI)) % 360) * 10
+        }
         setupAlarm(remainingSecs)
         updateTimer()
     }
