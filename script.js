@@ -54,7 +54,7 @@ document.documentElement.classList.toggle('hasTouch', hasTouch)
 function bindHandler(selector, events, listener) {
     const elements = typeof selector === 'string' ? document.querySelectorAll(selector) : [selector]
     events.split(' ').forEach(event => {
-        elements.forEach(el => el.addEventListener(event, listener))
+        elements.forEach(el => el.addEventListener(event, listener, {passive: true}))
     })
 }
 

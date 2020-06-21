@@ -114,7 +114,7 @@ circle {
     color: black;
 }
 
-#info,
+.info,
 #currentTime {
     position: fixed;
     width: 100%;
@@ -122,7 +122,7 @@ circle {
     -webkit-user-select: none;
 }
 
-#info {
+.info {
     text-align: center;
     font-size: 3vmin;
     color: grey;
@@ -140,14 +140,14 @@ circle {
 
 @media (max-width: 400px),
 (max-height: 400px) {
-    #info,
+    .info,
     #goGitHub,
     #currentTime {
         display: none;
     }
 }
 
-html[style^="--hide-text: 1"] #info,
+html[style^="--hide-text: 1"] .info,
 html[style^="--hide-text: 1"] #goGitHub,
 html[style^="--hide-text: 1"] #currentTime
 {
