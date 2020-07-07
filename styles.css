@@ -148,9 +148,9 @@ circle {
     }
 }
 
-html[style^="--hide-text: 1"] .info,
-html[style^="--hide-text: 1"] #goGitHub,
-html[style^="--hide-text: 1"] #currentTime
+html[style^="--hide-text:1"] .info,
+html[style^="--hide-text:1"] #goGitHub,
+html[style^="--hide-text:1"] #currentTime
 {
     display: none;
 }
