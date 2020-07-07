@@ -9,14 +9,15 @@ const svg = document.getElementById('timer')
 const showSettings = document.getElementById('show-settings')
 const settings = document.getElementById('settings')
 
-let startValue = 0
-let remainingSecs = 0
+let remaining = 0
+let startMinutePos
+let minutePos
 
 addElement(svg, 'circle', 'background')
 addElement(svg, 'circle', 'fives', 'tick')
 addElement(svg, 'circle', 'ones', 'tick')
-const timer2 = addElement(svg, 'circle', 'green', 'area')
-const timer = addElement(svg, 'circle', 'red', 'area')
+const greenArea = addElement(svg, 'circle', 'green', 'area')
+const redArea = addElement(svg, 'circle', 'red', 'area')
 const minute = addElement(svg, 'rect', 'minute', 'hand')
 const hour = addElement(svg, 'rect', 'hour', 'hand')
 
@@ -97,47 +98,46 @@ function minMax(value, min, max) {
     return Math.min(max, Math.max(min, value))
 }
 
-function getAreaTransform(seconds, minutePos) {
-    const rotate = minutePos - seconds / 10
-    const strokeLength = Math.PI * seconds / 1800
-
-    return 'transform: rotate(calc(var(--relative) * ' + rotate + 'deg)); ' +
-                      'stroke-dasharray: calc((var(--radius) + var(--spacing)) / 2 * ' + strokeLength + '),2000'
+function initTimer() {
+    const value = hasTouch ? 0 : minMax(getSetting('duration') * 60, 0, 3600)
+    const now = new Date()
+    startMinutePos = -(now.getMinutes() * 60 + now.getSeconds()) / 10 
+    setupAlarm(value)
+    window.setInterval(updateTimer, 1000)
 }
 
-function initTimer(event) {
-    const value = hasTouch ? 0 : minMax(getSetting('duration') * 60, 0, 3600)
+function getStroke(areaDegree) {
+    const strokeLength = areaDegree * Math.PI / 360
+    return 'stroke-dasharray: calc((var(--radius) + var(--spacing)) * ' + strokeLength + '),2000'
+}
 
-    //init the green section
-    const now = new Date()
-    const startMinutePos = -(now.getMinutes() * 60 + now.getSeconds()) / 10
-    timer2.setAttribute('style', getAreaTransform(value, startMinutePos))
-
-    setupAlarm(value)
-    updateTimer()
-    window.setInterval(updateTimer, 1000)
+function getRotate(relFactor, nonRelFactor) {
+    return 'transform: rotate(calc(var(--relative) * ' + relFactor + 'deg + ' +
+                                  '(1 - var(--relative)) * ' + nonRelFactor + 'deg))'
 }
 
 function updateTimer() {
     const now = new Date()
     const hourPos = -(now.getHours() * 60 + now.getMinutes()) / 2
-    const minutePos = -(now.getMinutes() * 60 + now.getSeconds()) / 10
+    minutePos = -(now.getMinutes() * 60 + now.getSeconds()) / 10
     minute.setAttribute('style', 'transform: rotate(' + minutePos + 'deg)')
     hour.setAttribute('style', 'transform: rotate(' + hourPos + 'deg)')
 
-    remainingSecs = (alarmTime - now) / 1000
-    if (remainingSecs >= 0) {
-        timer.setAttribute('style', getAreaTransform(remainingSecs, minutePos))
+    remaining = (alarmTime - now) / 10000
+    if (remaining >= 0) {
+        redArea.setAttribute('style', getRotate(minutePos - remaining, 0) + '; ' + getStroke(remaining))
+        greenArea.setAttribute('style', getRotate(minutePos, remaining) + '; ' + getStroke(startMinutePos - minutePos))
     } else {
-        timer.setAttribute('style', 'display: none')
-        timer2.setAttribute('style', 'display: none')
+        redArea.setAttribute('style', 'display: none')
+        greenArea.setAttribute('style', 'display: none')
     }
     currentTime.innerText = (new Date()).toLocaleTimeString()
 }
 
 function handleStart() {
     inSet = true
-    timer2.setAttribute('style', 'display: none')
+    redArea.setAttribute('style', 'display: none')
+    greenArea.setAttribute('style', 'display: none')
 }
 
 function handleMove(event) {
@@ -150,21 +150,18 @@ function handleMove(event) {
             const now = new Date()
             const minutePos = (now.getMinutes() * 60 + now.getSeconds()) / 10
             const valueDeg = -(minutePos - 90 + Math.atan2(-deltaY, deltaX) * (180 / Math.PI))
-            remainingSecs = ((valueDeg % 360) + 360) % 360 * 10
+            remaining = ((valueDeg % 360) + 360) % 360 * 10
         } else {
-            remainingSecs = ((270 + Math.atan2(-deltaY, deltaX) * (180 / Math.PI)) % 360) * 10
+            remaining = ((270 + Math.atan2(-deltaY, deltaX) * (180 / Math.PI)) % 360) * 10
         }
-        setupAlarm(remainingSecs)
-        updateTimer()
+        setupAlarm(remaining)
     }
 }
 
 function handleEnd() {
     inSet = false
-    setupAlarm(remainingSecs)
     const now = new Date()
-    const startMinutePos = -(now.getMinutes() * 60 + now.getSeconds()) / 10
-    timer2.setAttribute('style', getAreaTransform(remainingSecs, startMinutePos))
+    startMinutePos = -(now.getMinutes() * 60 + now.getSeconds()) / 10
 }
 
 function setupAlarm(seconds) {
@@ -176,6 +173,7 @@ function setupAlarm(seconds) {
         alarmTime = new Date((new Date()).getTime() + seconds * 1000)
         alarmTimer = setTimeout(alarm, seconds * 1000)
     }
+    updateTimer()
 }
 
 function alarm() {
