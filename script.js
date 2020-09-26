@@ -12,6 +12,7 @@ const settings = document.getElementById('settings')
 let remaining = 0
 let startMinutePos
 let minutePos
+let sound
 
 addElement(svg, 'circle', 'background')
 addElement(svg, 'circle', 'fives', 'tick')
@@ -138,6 +139,9 @@ function handleStart() {
     inSet = true
     redArea.setAttribute('style', 'display: none')
     greenArea.setAttribute('style', 'display: none')
+    sound = new Audio(config.ringtone)
+    sound.play()
+    sound.pause()
 }
 
 function handleMove(event) {
@@ -179,7 +183,6 @@ function setupAlarm(seconds) {
 function alarm() {
     alarmTimer = 0
     let playSound = 3
-    const sound = new Audio(config.ringtone)
     bindHandler(sound, 'ended', () => --playSound && sound.play())
     sound.play()
 }
