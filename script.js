@@ -139,21 +139,19 @@ function handleStart() {
     inSet = true
     redArea.setAttribute('style', 'display: none')
     greenArea.setAttribute('style', 'display: none')
-    sound = new Audio(config.ringtone)
-    sound.play()
-    sound.pause()
 }
 
 function handleMove(event) {
     if (inSet) {
+        const now = new Date()
+        const minutePos = -(now.getMinutes() * 60 + now.getSeconds()) / 10
+        startMinutePos = -(now.getMinutes() * 60 + now.getSeconds()) / 10
         const pos = event.type === 'touchmove' ? event.changedTouches[0] : event
         const r = svg.getBoundingClientRect()
         const deltaX = pos.clientX - r.x - r.width / 2
         const deltaY = pos.clientY - r.y - r.height / 2
         if (config.relative) {
-            const now = new Date()
-            const minutePos = (now.getMinutes() * 60 + now.getSeconds()) / 10
-            const valueDeg = -(minutePos - 90 + Math.atan2(-deltaY, deltaX) * (180 / Math.PI))
+            const valueDeg = minutePos + 90 - Math.atan2(-deltaY, deltaX) * (180 / Math.PI)
             remaining = ((valueDeg % 360) + 360) % 360 * 10
         } else {
             remaining = ((270 + Math.atan2(-deltaY, deltaX) * (180 / Math.PI)) % 360) * 10
@@ -164,8 +162,9 @@ function handleMove(event) {
 
 function handleEnd() {
     inSet = false
-    const now = new Date()
-    startMinutePos = -(now.getMinutes() * 60 + now.getSeconds()) / 10
+    sound = new Audio(config.ringtone)
+    sound.play()
+    sound.pause()
 }
 
 function setupAlarm(seconds) {
