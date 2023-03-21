@@ -6,7 +6,7 @@ Regrettably, whenever you need it, you left it home. And if only, because it is 
 
 Now you can use this small application to use it without needing to carry more than you already have - your computer.
 
-[![Timer](timer.png)](https://timer.digital-wachsen.de/?duration=20&area-opacity=100)
+[![Timer](timer.png)](https://timer.justso.de/?duration=20&area-opacity=100)
 Click on image to try the timer yourself
 
 ## Features
@@ -19,7 +19,7 @@ Click on image to try the timer yourself
 - Works in the background (you don't need to keep the window in front)
 - Shows remaining time either relative to minute hand or up to 12
 - Configurable in a lot of aspects (see [configuration section](#configuration))
-- No installation needed, runs [just here](https://timer.digital-wachsen.de)
+- No installation needed, runs [just here](https://timer.justso.de)
 - No fees, no signup, no tracking
 - optimized for OBS
 
@@ -40,7 +40,7 @@ html {
 Feel free to change additional styles to fit your design.
 
 If you use the timer installed on a web server, you can just use the URL and append the parameter `duration` with the duration in minutes.
-For example, `https://timer.digital-wachsen.de/?duration=13` would give you a 13 minutes timer.
+For example, `https://timer.justso.de/?duration=13` would give you a 13 minutes timer.
 
 Since there is no good way to interact with the timer while embedded in an OBS scene, it makes sense to create an extra scene for the timer and mark the checkbox `Refresh browser when scene becomes active`.
 This will let you start the timer by switching the scene.
@@ -86,6 +86,6 @@ html {
 
 Each of these options (or all of them) can be set via URL as well like in this example:
 
-https://timer.digital-wachsen.de/?duration=5&hide-text=1
+https://timer.justso.de/?duration=5&hide-text=1
 
 URL options will override css options.
